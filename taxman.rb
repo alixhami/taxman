@@ -54,6 +54,7 @@ def calc_estimated_taxes(filing_status, gross_income)
   if agi <= 0
     estimated_taxes = 0
     marginal_rate = "0%"
+    average_rate = "0"
   elsif agi <= cap_10
     estimated_taxes = agi * 0.10
     marginal_rate = "10%"
@@ -76,9 +77,12 @@ def calc_estimated_taxes(filing_status, gross_income)
     estimated_taxes = max_35 + ((agi - cap_35) * 0.396)
     marginal_rate = "39.6%"
   end
+
+  average_rate ||= (estimated_taxes/gross_income*100).to_i
+
   puts "Your estimated 2016 income taxes are $#{estimated_taxes.to_i}"
   puts "Your marginal tax rate is #{marginal_rate}"
-  puts "Your average tax rate is #{(estimated_taxes/gross_income*100).to_i}%"
+  puts "Your average tax rate is #{average_rate}%"
 end
 
 calc_estimated_taxes(filing_status, gross_income)
