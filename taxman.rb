@@ -22,6 +22,7 @@ def calc_estimated_taxes(filing_status, gross_income)
   when "single"
     personal_exemption = 4050
     standard_deduction = 6300
+    pep_threshold = 258250
     cap_10 = 9275.0
     cap_15 = 37650.0
     cap_25 = 91150.0
@@ -31,12 +32,26 @@ def calc_estimated_taxes(filing_status, gross_income)
   when "mfj"
     personal_exemption = 8100
     standard_deduction = 12600
+    pep_threshold = 309900
     cap_10 = 18550.0
     cap_15 = 75300.0
     cap_25 = 151900.0
     cap_28 = 231450.0
     cap_33 = 413350.0
     cap_35 = 466950.0
+  end
+
+  # personal exemption phaseout
+  # must reduce the dollar amout of exemptions by 2% for each $2500 or part of $2500 that AGI exceeds threshold
+  # If AGI exceeds the theshold by more than $122,500, the amount of your deduction for exemptions is reduced to zero.
+  if gross_income > pep_threshold
+    number_of_reductions = ((gross_income - pep_threshold)/2500.0).ceil
+    percentage_reduction = 0.02 * number_of_reductions
+    if gross_income - pep_threshold >= 122500
+      personal_exemption = 0
+    else
+      personal_exemption *= 1 - percentage_reduction
+    end
   end
 
   # calculate taxable income
