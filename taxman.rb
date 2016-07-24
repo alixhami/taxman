@@ -39,8 +39,8 @@ def calc_estimated_taxes(filing_status, gross_income)
     cap_35 = 466950.0
   end
 
-  # calculate AGI
-  agi = gross_income - standard_deduction - personal_exemption
+  # calculate taxable income
+  taxable_income = gross_income - standard_deduction - personal_exemption
 
   # these variables store the maximum tax at each rate
   max_10 = cap_10 * 0.1
@@ -51,30 +51,30 @@ def calc_estimated_taxes(filing_status, gross_income)
   max_35 = ((cap_35 - cap_33) * 0.35) + max_33
 
   # calculate estimated taxes and marginal rate
-  if agi <= 0
+  if taxable_income <= 0
     estimated_taxes = 0
     marginal_rate = "0%"
     average_rate = "0"
-  elsif agi <= cap_10
-    estimated_taxes = agi * 0.10
+  elsif taxable_income <= cap_10
+    estimated_taxes = taxable_income * 0.10
     marginal_rate = "10%"
-  elsif agi <= cap_15
-    estimated_taxes = max_10 + ((agi - cap_10) * 0.15)
+  elsif taxable_income <= cap_15
+    estimated_taxes = max_10 + ((taxable_income - cap_10) * 0.15)
     marginal_rate = "15%"
-  elsif agi <= cap_25
-    estimated_taxes = max_15 + ((agi - cap_15) * 0.25)
+  elsif taxable_income <= cap_25
+    estimated_taxes = max_15 + ((taxable_income - cap_15) * 0.25)
     marginal_rate = "25%"
-  elsif agi <= cap_28
-    estimated_taxes = max_25 + ((agi - cap_25) * 0.28)
+  elsif taxable_income <= cap_28
+    estimated_taxes = max_25 + ((taxable_income - cap_25) * 0.28)
     marginal_rate = "28%"
-  elsif agi <= cap_33
-    estimated_taxes = max_28 + ((agi - cap_28) * 0.33)
+  elsif taxable_income <= cap_33
+    estimated_taxes = max_28 + ((taxable_income - cap_28) * 0.33)
     marginal_rate = "33%"
-  elsif agi <= cap_35
-    estimated_taxes = max_33 + ((agi - cap_33) * 0.35)
+  elsif taxable_income <= cap_35
+    estimated_taxes = max_33 + ((taxable_income - cap_33) * 0.35)
     marginal_rate = "35%"
   else
-    estimated_taxes = max_35 + ((agi - cap_35) * 0.396)
+    estimated_taxes = max_35 + ((taxable_income - cap_35) * 0.396)
     marginal_rate = "39.6%"
   end
 
