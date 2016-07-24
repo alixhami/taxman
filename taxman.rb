@@ -94,6 +94,9 @@ end
 
 average_rate ||= (estimated_taxes/gross_income*100).to_i
 
-puts "Your estimated 2016 income taxes are $#{estimated_taxes.to_i}"
+# format estimated taxes to display with commas
+formatted_est_tax = estimated_taxes.ceil.to_s.reverse.gsub(/(\d{3})(?=\d)/, '\\1,').reverse
+
+puts "Your estimated 2016 income taxes are $#{formatted_est_tax}"
 puts "Your marginal tax rate is #{marginal_rate}"
 puts "Your average tax rate is #{average_rate}%"
