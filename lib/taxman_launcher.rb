@@ -6,8 +6,8 @@ puts "... by estimating your 2016 Federal Income Taxes."
 
 # determine filing status
 puts "At the end of the year, will you be 'single' or 'married'?"
-response = gets.chomp
-case response.downcase
+status_input = gets.chomp
+case status_input.downcase
 when "single"
   $filing_status = "single"
 when "married"
@@ -19,7 +19,15 @@ end
 
 # get gross income
 puts "How much is your yearly income? If you're married, include your spouse's income."
-$gross_income = gets.chomp.to_i
+loop do
+    income_input = gets.chomp
+    begin
+      $gross_income = Integer(income_input)
+      break
+    rescue
+      puts "Please enter a valid number without punctuation."
+    end
+end
 
 define_bracket
 calc_maximum
