@@ -7,9 +7,9 @@ The calculation considers:
 + Personal exemption(s)
 + Standard deduction
 + Estimated 2016 brackets
++ Phase out of personal exemption(s)
 
 The calculation does not consider:
-+ Phase out of personal exemption(s)
 + Income not taxed at ordinary rate (e.g., Qualified Dividends)
 + Tax Credits
 + Additional deductions
