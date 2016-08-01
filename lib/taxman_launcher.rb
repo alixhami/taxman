@@ -1,7 +1,7 @@
 require_relative "taxman"
 
 # start with the user's filing status
-puts "Greetings! I'm the TAXMAN and I'm here to save the day!"
+puts "Greetings! I'm TAXMAN and I'm here to save the day!"
 puts "... by estimating your 2016 Federal Income Taxes."
 
 # determine filing status

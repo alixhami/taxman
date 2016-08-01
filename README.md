@@ -1,4 +1,4 @@
-# Taxman
+# TAXMAN
 *Practice Ruby project to compute estimated 2016 income taxes*    
 
 The current program will take gross income and filing status (single or married filing jointly only) and compute estimated 2016 Federal Income Tax due.
