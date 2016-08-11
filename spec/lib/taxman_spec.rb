@@ -1,29 +1,108 @@
+# Note to self - run tests from main taxman folder with the following command:
+# rspec spec/lib/taxman_spec.rb
+
 require "spec_helper"
 require_relative "../../lib/taxman"
 
-describe "personal exemption phaseout" do
-  it "uses full exemption when under threshold" do
-    $filing_status = 'single'
-    $gross_income = 10_000
-    calc_personal_exemption
-    expect($personal_exemption).to eq(4050)
+describe Taxpayer do
+  context "with $0 gross income" do
+    user = Taxpayer.new('single',0)
+
+    it "calculates $0 estimated taxes" do
+      expect(user.estimated_taxes).to eq(0)
+    end
+
+    it "calculates 0% marginal tax rate" do
+      expect(user.marginal_rate).to eq(0)
+    end
+
+    it "calculates 0% average tax rate" do
+      expect(user.average_rate).to eq(0)
+    end
+  end
+end
+
+describe Taxpayer do
+  context "with taxable income under 10% bracket" do
+    user = Taxpayer.new('single',15_000)
+
+    it "uses full personal exemption" do
+      expect(user.personal_exemption).to eq(4_050)
+    end
+
+    it "calculates estimated taxes" do
+      expect(user.estimated_taxes).to eq(465)
+    end
+
+    it "calculates average tax rate" do
+      expect(user.average_rate).to eq(3)
+    end
+
+    it "calculates marginal tax rate" do
+      expect(user.marginal_rate).to eq(10)
+    end
+  end
+end
+
+describe Taxpayer do
+  context "with taxable income between 25% and 28% bracket" do
+    user = Taxpayer.new('single',150_000)
+
+    it "uses full personal exemption" do
+      expect(user.personal_exemption).to eq(4_050)
+    end
+
+    it "calculates estimated taxes" do
+      expect(user.estimated_taxes).to eq(32_138.75)
+    end
+
+    it "calculates average tax rate" do
+      expect(user.average_rate).to eq(21)
+    end
+
+    it "calculates marginal tax rate" do
+      expect(user.marginal_rate).to eq(28)
+    end
+  end
+end
+
+describe Taxpayer do
+  context "with taxable income above the top bracket" do
+    user = Taxpayer.new('single',500_000)
+
+    it "completely phases out the personal exemption" do
+      expect(user.personal_exemption).to eq(0)
+    end
+
+    it "calculates estimated taxes" do
+      expect(user.estimated_taxes).to eq(151_675.15)
+    end
+
+    it "calculates average tax rate" do
+      expect(user.average_rate).to eq(30)
+    end
+
+    it "calculates marginal tax rate" do
+      expect(user.marginal_rate).to eq(39.6)
+    end
   end
 end
 
 describe "personal exemption phaseout" do
-  it "calculates correctly mid-phaseout" do
-    $filing_status = 'single'
-    $gross_income = 275_000
-    calc_personal_exemption
-    expect($personal_exemption).to eq(3483)
+  it "calculates correctly mid-phaseout for single status" do
+    user = Taxpayer.new('single', 275_000)
+    expect(user.personal_exemption).to eq(3_483)
+  end
+
+  it "calculates correctly mid-phaseout for mfj status" do
+    user = Taxpayer.new('mfj',400_000)
+    expect(user.personal_exemption).to eq(2_106)
   end
 end
 
 describe "personal exemption phaseout" do
   it "completely phase out above limit" do
-    $filing_status = 'single'
-    $gross_income = 380750
-    calc_personal_exemption
-    expect($personal_exemption).to eq(0)
+    user = Taxpayer.new('single', 380_750)
+    expect(user.personal_exemption).to eq(0)
   end
 end
