@@ -1,21 +1,16 @@
-# determine tax brackets
-# make a dictionary cap[10] = 9275 or cap[:10]
-# taxpayer class holds methods
-# => attr_reader and attr_accessor for calculation outputs needed in the launcher
-# =>  means you can read and access something
-
-# create giant class of taxpayer
-# class variables
 class Taxpayer
+
   attr_accessor :filing_status, :gross_income
   attr_reader :estimated_taxes, :average_rate, :marginal_rate, :standard_deduction, :personal_exemption
 
   def initialize(filing_status, gross_income)
-      @filing_status = filing_status
-      @gross_income = gross_income
+    @filing_status = filing_status
+    @gross_income = gross_income
 
-      @bracket_limits = Hash.new(0)
-	  case @filing_status
+    # determine tax brackets
+    @bracket_limits = Hash.new(0)
+
+    case @filing_status
 	  when "single"
 	    @standard_deduction = 6300
 	    @personal_exemption = 4050
