@@ -1,40 +1,17 @@
-class Taxpayer
+require "constants_by_filing_status.rb"
 
+class Taxpayer
+  include Tax
   attr_accessor :gross_income
   attr_reader :estimated_taxes, :average_rate, :marginal_rate, :standard_deduction, :personal_exemption
 
   def initialize(filing_status,gross_income)
     @gross_income = gross_income
     @filing_status = filing_status
-
-    case @filing_status
-    	  when "single"
-    	    @standard_deduction = 6300
-    	    @personal_exemption = 4050
-    	    @pep_threshold = 258250
-          @tax_brackets = [
-          	{rate: 0.10, limit: 9275.0},
-          	{rate: 0.15, limit: 37650.0},
-          	{rate: 0.25, limit: 91150.0},
-          	{rate: 0.28, limit: 190150.0},
-          	{rate: 0.33, limit: 413350.0},
-          	{rate: 0.35, limit: 415050.0},
-          	{rate: 0.396}
-          ]
-    	  when "mfj"
-    	    @standard_deduction = 12600
-    	    @personal_exemption = 8100
-    	    @pep_threshold = 309900
-    	    @tax_brackets = [
-            {rate: 0.10, limit: 18550.0},
-          	{rate: 0.15, limit: 75300.0},
-          	{rate: 0.25, limit: 151900.0},
-          	{rate: 0.28, limit: 231450.0},
-          	{rate: 0.33, limit: 413350.0},
-          	{rate: 0.35, limit: 466950.0},
-          	{rate: 0.396}
-          ]
-    end
+    @tax_brackets = BRACKETS[@filing_status.to_sym]
+    @standard_deduction = STANDARD_DEDUCTION[@filing_status.to_sym]
+    @personal_exemption = PERSONAL_EXEMPTION[@filing_status.to_sym]
+    @pep_threshold = PEP_THRESHOLD[@filing_status.to_sym]
 
     # personal exemption phaseout (PEP)
     # must reduce the dollar amount of exemptions by 2% for each @2500 or part of @2500 that AGI exceeds threshold
@@ -62,6 +39,8 @@ class Taxpayer
     # taxable income was exactly at the bracket limit. This shortens the ultimate
     # calculation of estimated taxes, because only the tax on the income above
     # the highest bracket will need to be calculated for each taxpayer.
+
+
     (@tax_brackets.length-1).times do |i|
     	if i == 0
     		@tax_brackets[i][:tax_at_limit] = @tax_brackets[i][:rate] * @tax_brackets[i][:limit]
@@ -97,16 +76,17 @@ class Taxpayer
     else
     	@estimated_taxes = @tax_brackets[@bracket_index-1][:tax_at_limit] + (@marginal_income * @marginal_rate)
 	  end
+  end
 
     # Calculate Average Rate
+  def average_rate
     if @taxable_income == 0
-      @average_rate = 0
+      0
     else
-      @average_rate = @estimated_taxes / @gross_income
+      @estimated_taxes / @gross_income
     end
-
-	end
-
+  end
+  
 end
 
 # format estimated taxes to display with commas
