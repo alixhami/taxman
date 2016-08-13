@@ -32,5 +32,5 @@ end
 
 user = Taxpayer.new(filing_status, gross_income)
 puts "Your estimated 2016 income taxes are #{dollar_format(user.estimated_taxes)}"
-puts "Your marginal tax rate is #{user.marginal_rate}%"
-puts "Your average tax rate is #{user.average_rate}%"
+puts "Your marginal tax rate is #{percentage_format(user.marginal_rate)}"
+puts "Your average tax rate is #{percentage_format(user.average_rate)}"
