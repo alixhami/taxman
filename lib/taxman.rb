@@ -52,7 +52,11 @@ class Taxpayer
 	  end
 
 	  # calculate taxable income
-	  @taxable_income = @gross_income - @standard_deduction - @personal_exemption
+	  if @gross_income - @standard_deduction - @personal_exemption < 0
+	  	@taxable_income = 0
+	  else
+	  	@taxable_income = @gross_income - @standard_deduction - @personal_exemption
+	  end
 
     # For each bracket, the loop below calculates the tax due if the taxpayer's
     # taxable income was exactly at the bracket limit. This shortens the ultimate
@@ -88,10 +92,14 @@ class Taxpayer
     @marginal_rate = @tax_brackets[@bracket_index][:rate]
 
     # Calculate Estimated Taxes
-    @estimated_taxes = @tax_brackets[@bracket_index-1][:tax_at_limit] + (@marginal_income * @marginal_rate)
+    if @bracket_index == 0
+    	@estimated_taxes = @marginal_income * @marginal_rate
+    else
+    	@estimated_taxes = @tax_brackets[@bracket_index-1][:tax_at_limit] + (@marginal_income * @marginal_rate)
+	  end
 
     # Calculate Average Rate
-    if @gross_income == 0
+    if @taxable_income == 0
       @average_rate = 0
     else
       @average_rate = @estimated_taxes / @gross_income

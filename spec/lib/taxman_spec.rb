@@ -12,8 +12,8 @@ describe Taxpayer do
       expect(user.estimated_taxes).to eq(0)
     end
 
-    it "calculates 0% marginal tax rate" do
-      expect(user.marginal_rate).to eq(0)
+    it "calculates 10% marginal tax rate" do
+      expect(user.marginal_rate).to eq(0.1)
     end
 
     it "calculates 0% average tax rate" do
@@ -35,11 +35,11 @@ describe Taxpayer do
     end
 
     it "calculates average tax rate" do
-      expect(user.average_rate).to eq(3)
+      expect(user.average_rate).to be_within(0.001).of(0.031)
     end
 
     it "calculates marginal tax rate" do
-      expect(user.marginal_rate).to eq(10)
+      expect(user.marginal_rate).to eq(0.10)
     end
   end
 end
@@ -57,11 +57,11 @@ describe Taxpayer do
     end
 
     it "calculates average tax rate" do
-      expect(user.average_rate).to eq(21)
+      expect(user.average_rate).to be_within(0.01).of(0.21)
     end
 
     it "calculates marginal tax rate" do
-      expect(user.marginal_rate).to eq(28)
+      expect(user.marginal_rate).to eq(0.28)
     end
   end
 end
@@ -79,11 +79,11 @@ describe Taxpayer do
     end
 
     it "calculates average tax rate" do
-      expect(user.average_rate).to eq(30)
+      expect(user.average_rate).to be_within(0.01).of(0.30)
     end
 
     it "calculates marginal tax rate" do
-      expect(user.marginal_rate).to eq(39.6)
+      expect(user.marginal_rate).to eq(0.396)
     end
   end
 end
