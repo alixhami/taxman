@@ -91,18 +91,32 @@ end
 describe "personal exemption phaseout" do
   it "calculates correctly mid-phaseout for single status" do
     user = Taxpayer.new('single', 275_000)
-    expect(user.personal_exemption).to eq(3_483)
+    expect(user.personal_exemption).to be_within(1).of(3_483)
   end
 
   it "calculates correctly mid-phaseout for mfj status" do
     user = Taxpayer.new('mfj',400_000)
-    expect(user.personal_exemption).to eq(2_106)
+    expect(user.personal_exemption).to be_within(1).of(2_106)
   end
-end
 
-describe "personal exemption phaseout" do
-  it "completely phase out above limit" do
+  it "calculates correctly mid-phaseout for mfs status" do
+    user = Taxpayer.new('mfs',200_000)
+    expect(user.personal_exemption).to be_within(1).of(2_511)
+  end
+
+  it "calculates correctly mid-phaseout for head of household status" do
+    user = Taxpayer.new('head_of_household',400_000)
+    expect(user.personal_exemption).to be_within(1).of(243)
+  end
+
+  it "completely phases out above the end of single/mfj/hoh threshold" do
     user = Taxpayer.new('single', 380_750)
     expect(user.personal_exemption).to eq(0)
   end
+
+  it "completely phases out above the end of the mfs threshold" do
+    user = Taxpayer.new('mfs',216_200)
+    expect(user.personal_exemption).to eq(0)
+  end
+
 end

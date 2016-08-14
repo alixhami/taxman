@@ -15,7 +15,7 @@ class Taxpayer
 
   # personal exemption phaseout (PEP)
   # must reduce the dollar amount of exemptions by 2% for each $2500 or part of $2500 that AGI exceeds threshold
-  # If AGI exceeds the theshold by more than $122,500, the amount of your deduction for exemptions is reduced to zero.
+  # If AGI exceeds the theshold by more than $122,500 ($61,250 for MFS), the amount of your deduction for exemptions is reduced to zero.
   # determine default personal exemption and PEP threshold
   def personal_exemption
     if @gross_income < @pep_threshold
@@ -23,15 +23,17 @@ class Taxpayer
       PERSONAL_EXEMPTION[@filing_status.to_sym]
     else
       # if gross income is above the phase out range, return $0 personal exemption
-      if @gross_income - @pep_threshold >= 122500
-        0
+      if @filing_status == "mfs" && @gross_income - @pep_threshold >= 61250
+        return 0
+      elsif @gross_income - @pep_threshold >= 122500
+        return 0
       else
         # calculate the number of multiples of $2,500 that gross income is over the threshold
   	    number_of_reductions = ((@gross_income - @pep_threshold)/2500.0).ceil
         # get total % reduction by multiplying that number of multiples by the 2% reduction percentage
         percentage_reduction = 0.02 * number_of_reductions
         # reduce the personal exemption by the total % reduction
-	      PERSONAL_EXEMPTION[@filing_status.to_sym] * (1 - percentage_reduction)
+	      return PERSONAL_EXEMPTION[@filing_status.to_sym] * (1 - percentage_reduction)
 	    end
 	  end
   end
