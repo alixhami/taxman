@@ -1,4 +1,4 @@
-require "constants_by_filing_status.rb"
+require 'constants_by_filing_status'
 
 class Taxpayer
   include Tax

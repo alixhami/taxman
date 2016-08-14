@@ -1,4 +1,5 @@
-require_relative "taxman"
+$LOAD_PATH.unshift '.'
+require 'taxman'
 
 # start with the user's filing status
 puts "Greetings! I'm TAXMAN and I'm here to save the day!"
