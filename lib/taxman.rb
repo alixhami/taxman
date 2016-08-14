@@ -10,83 +10,84 @@ class Taxpayer
     @filing_status = filing_status
     @tax_brackets = BRACKETS[@filing_status.to_sym]
     @standard_deduction = STANDARD_DEDUCTION[@filing_status.to_sym]
-    @personal_exemption = PERSONAL_EXEMPTION[@filing_status.to_sym]
     @pep_threshold = PEP_THRESHOLD[@filing_status.to_sym]
+  end
 
-    # personal exemption phaseout (PEP)
-    # must reduce the dollar amount of exemptions by 2% for each @2500 or part of @2500 that AGI exceeds threshold
-    # If AGI exceeds the theshold by more than @122,500, the amount of your deduction for exemptions is reduced to zero.
-
-    # determine default personal exemption and PEP threshold
-	  if @gross_income > @pep_threshold
-	    number_of_reductions = ((@gross_income - @pep_threshold)/2500.0).ceil
-	    percentage_reduction = 0.02 * number_of_reductions
-	    if @gross_income - @pep_threshold >= 122500
-	      @personal_exemption = 0
-	    else
-	      @personal_exemption *= 1 - percentage_reduction
+  # personal exemption phaseout (PEP)
+  # must reduce the dollar amount of exemptions by 2% for each $2500 or part of $2500 that AGI exceeds threshold
+  # If AGI exceeds the theshold by more than $122,500, the amount of your deduction for exemptions is reduced to zero.
+  # determine default personal exemption and PEP threshold
+  def personal_exemption
+    if @gross_income < @pep_threshold
+      # set full personal exemption amount when under threshold
+      PERSONAL_EXEMPTION[@filing_status.to_sym]
+    else
+      # if gross income is above the phase out range, return $0 personal exemption
+      if @gross_income - @pep_threshold >= 122500
+        0
+      else
+        # calculate the number of multiples of $2,500 that gross income is over the threshold
+  	    number_of_reductions = ((@gross_income - @pep_threshold)/2500.0).ceil
+        # get total % reduction by multiplying that number of multiples by the 2% reduction percentage
+        percentage_reduction = 0.02 * number_of_reductions
+        # reduce the personal exemption by the total % reduction
+	      PERSONAL_EXEMPTION[@filing_status.to_sym] * (1 - percentage_reduction)
 	    end
 	  end
+  end
 
-	  # calculate taxable income
-	  if @gross_income - @standard_deduction - @personal_exemption < 0
-	  	@taxable_income = 0
+	# calculate taxable income
+  def taxable_income
+	  if @gross_income - @standard_deduction - personal_exemption < 0
+	  	0
 	  else
-	  	@taxable_income = @gross_income - @standard_deduction - @personal_exemption
+	  	@gross_income - @standard_deduction - personal_exemption
 	  end
+  end
 
-    # For each bracket, the loop below calculates the tax due if the taxpayer's
-    # taxable income was exactly at the bracket limit. This shortens the ultimate
-    # calculation of estimated taxes, because only the tax on the income above
-    # the highest bracket will need to be calculated for each taxpayer.
-
-
-    (@tax_brackets.length-1).times do |i|
-    	if i == 0
-    		@tax_brackets[i][:tax_at_limit] = @tax_brackets[i][:rate] * @tax_brackets[i][:limit]
-    	else
-    		@tax_brackets[i][:tax_at_limit] = @tax_brackets[i-1][:tax_at_limit] + (@tax_brackets[i][:rate] * (@tax_brackets[i][:limit] - @tax_brackets[i-1][:limit]))
-    	end
-    end
-
+  def bracket_index
     # The following loop determines the taxpayer's marginal tax bracket
     (@tax_brackets.length).times do |i|
     	if i == 6
-    		@bracket_index = i
-    	elsif
-    		@taxable_income < @tax_brackets[i][:limit]
-    		@bracket_index = i
+    		return i
+    	elsif taxable_income < @tax_brackets[i][:limit]
+    		return i
     		break
     	end
     end
+  end
 
-    # Define Marginal Income
-    if @bracket_index == 0
-      @marginal_income = @taxable_income
+  def marginal_rate
+    @tax_brackets[bracket_index][:rate]
+  end
+
+  # Calculate Marginal Income
+  def marginal_income
+    if bracket_index == 0
+      taxable_income
     else
-	    @marginal_income = @taxable_income - @tax_brackets[@bracket_index-1][:limit]
+	    taxable_income - @tax_brackets[bracket_index-1][:limit]
     end
+  end
 
-    # Define Marginal Rate
-    @marginal_rate = @tax_brackets[@bracket_index][:rate]
-
-    # Calculate Estimated Taxes
-    if @bracket_index == 0
-    	@estimated_taxes = @marginal_income * @marginal_rate
+  # Calculate Estimated Taxes
+  def estimated_taxes
+    if bracket_index == 0
+    	marginal_income * marginal_rate
     else
-    	@estimated_taxes = @tax_brackets[@bracket_index-1][:tax_at_limit] + (@marginal_income * @marginal_rate)
+    	@tax_brackets[bracket_index-1][:tax_at_limit] + (marginal_income * marginal_rate)
 	  end
   end
 
     # Calculate Average Rate
   def average_rate
-    if @taxable_income == 0
+    if taxable_income == 0
       0
     else
-      @estimated_taxes / @gross_income
+      estimated_taxes / @gross_income
     end
   end
-  
+
 end
 
 # format estimated taxes to display with commas

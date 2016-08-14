@@ -38,6 +38,18 @@ module Tax
       ]
   	}
 
+  # For each filing status, the loop below loop below calculates the cumulative
+  # maximum tax due if the taxpayer's taxable income was exactly at the bracket limit.
+  BRACKETS.each do |key,val|
+  	6.times do |i|
+  		if i == 0
+  			val[i][:tax_at_limit] = val[i][:rate] * val[i][:limit]
+  		else
+  			val[i][:tax_at_limit] = val[i-1][:tax_at_limit] + (val[i][:rate] * (val[i][:limit] - val[i-1][:limit]))
+  		end
+  	end
+  end
+
   STANDARD_DEDUCTION = {
     single: 6300,
     mfj: 12600,
