@@ -1,0 +1,19 @@
+<h1>Welcome to TAXMAN!</h1>
+
+<%= form_for :taxpayer, url: taxpayers_path do |f| %>
+  <h3>Filing Status</h3>
+  <%= f.radio_button(:filing_status, "single") %>
+  <%= label_tag(:single, "Single") %><br />
+  <%= f.radio_button(:filing_status, "mfj") %>
+  <%= label_tag(:mfj, "Married Filing Jointly") %><br />
+  <%= f.radio_button(:filing_status, "mfs") %>
+  <%= label_tag(:mfs, "Married Filing Separately") %><br />
+  <%= f.radio_button(:filing_status, "head_of_household") %>
+  <%= label_tag(:head_of_household, "Head of Household") %><br />
+  <%= f.radio_button(:filing_status, "mfj") %>
+  <%= label_tag(:mfj, "Qualifying Widow(er)") %><br />
+  <h3>Gross Income</h3>
+  <%= f.number_field(:gross_income, in: 0.0..1000000000.0, step: 0.5) %>
+  <%= f.submit %>
+
+<% end %>
