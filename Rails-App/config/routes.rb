@@ -2,6 +2,10 @@ Rails.application.routes.draw do
   resources :taxpayers
 
   root 'taxpayers#index'
+
+  get '/new', to: 'taxpayers#new'
+
+  post '/estimated-tax', to: 'taxpayers#create'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

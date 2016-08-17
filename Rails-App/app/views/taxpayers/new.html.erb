@@ -1,6 +1,6 @@
 <h1>Welcome to TAXMAN!</h1>
 
-<%= form_for :taxpayer, url: taxpayers_path do |f| %>
+<%= form_for :taxpayer, url: estimated_tax_path do |f| %>
   <h3>Filing Status</h3>
   <%= f.radio_button(:filing_status, "single") %>
   <%= label_tag(:single, "Single") %><br />
@@ -16,6 +16,7 @@
   <%= f.number_field(:gross_income, in: 0.0..1000000000.0, step: 0.5) %>
   <br />
   <br />
-  <%= f.submit %>
+  <%= f.submit "Calculate!" %>
 
 <% end %>
+<a href="/"><<</a>

@@ -1,0 +1,15 @@
+<p>
+  <strong>Estimated Taxes:</strong>
+  <%= dollar_format(@taxpayer.estimated_taxes) %>
+</p>
+
+<p>
+  <strong>Marginal Tax Rate:</strong>
+  <%= percentage_format(@taxpayer.marginal_rate) %>
+</p>
+
+<p>
+  <strong>Average Tax Rate:</strong>
+  <%= percentage_format(@taxpayer.average_rate) %>
+</p>
+<a href="/new">New Estimate</a>

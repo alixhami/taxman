@@ -2,10 +2,6 @@ class TaxpayersController < ApplicationController
   def index
   end
 
-  def show
-    @taxpayer = Taxpayer.find(taxpayer_params[:id])
-  end
-
   def new
   end
 
