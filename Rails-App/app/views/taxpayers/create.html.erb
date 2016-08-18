@@ -1,3 +1,6 @@
+<div class="container">
+
+<h1 class="medium-title">Estimated Taxes</h1>
 <p>
   <strong>Estimated Taxes:</strong>
   <%= dollar_format(@taxpayer.estimated_taxes) %>
@@ -12,4 +15,6 @@
   <strong>Average Tax Rate:</strong>
   <%= percentage_format(@taxpayer.average_rate) %>
 </p>
-<a href="/new">New Estimate</a>
+<button><a href="/new">New Estimate</a></button>
+
+</div>

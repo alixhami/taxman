@@ -1,7 +1,13 @@
-<h1>Welcome to TAXMAN!</h1>
+<div class="container">
+
+<h1 class="medium-title">Enter your info!</h1>
+
+<div class="content-container">
 
 <%= form_for :taxpayer, url: estimated_tax_path do |f| %>
+  <div class="form-inputs">
   <h3>Filing Status</h3>
+
   <%= f.radio_button(:filing_status, "single") %>
   <%= label_tag(:single, "Single") %><br />
   <%= f.radio_button(:filing_status, "mfj") %>
@@ -12,11 +18,17 @@
   <%= label_tag(:head_of_household, "Head of Household") %><br />
   <%= f.radio_button(:filing_status, "mfj") %>
   <%= label_tag(:mfj, "Qualifying Widow(er)") %><br />
+
   <h3>Gross Income</h3>
   <%= f.number_field(:gross_income, in: 0.0..1000000000.0, step: 0.5) %>
+  </div>
   <br />
   <br />
+
   <%= f.submit "Calculate!" %>
 
 <% end %>
+<br />
 <a href="/"><<</a>
+</div>
+</div>
