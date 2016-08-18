@@ -15,7 +15,6 @@ The calculation does not consider:
 + Federal Withholding
 + Additional deductions
 + Dependents
-+ Qualifying Widow(er) filing status (can be calculated using MFJ)
 + And the rest of the vast abyss of the tax code
 
 This is an ongoing project, and I plan to address many of the current limitations as I continue to improve the program.
