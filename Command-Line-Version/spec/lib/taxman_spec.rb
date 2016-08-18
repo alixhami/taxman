@@ -12,8 +12,8 @@ describe Taxpayer do
       expect(user.estimated_taxes).to eq(0)
     end
 
-    it "calculates 10% marginal tax rate" do
-      expect(user.marginal_rate).to eq(0.1)
+    it "calculates 0% marginal tax rate" do
+      expect(user.marginal_rate).to eq(0)
     end
 
     it "calculates 0% average tax rate" do

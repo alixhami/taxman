@@ -7,10 +7,6 @@ class TaxpayersController < ApplicationController
 
   def create
     @taxpayer = Taxpayer.new(taxpayer_params)
-#    render plain: @taxpayer.estimated_taxes
-
-#    @taxpayer.save
-#    redirect_to @taxpayer
   end
 
   private

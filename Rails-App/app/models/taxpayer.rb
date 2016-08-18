@@ -61,7 +61,11 @@ class Taxpayer
   end
 
   def marginal_rate
-    @tax_brackets[bracket_index][:rate]
+    if taxable_income == 0
+      0
+    else
+      @tax_brackets[bracket_index][:rate]
+    end
   end
 
   # Calculate Marginal Income

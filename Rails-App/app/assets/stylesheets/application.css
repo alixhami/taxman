@@ -56,6 +56,10 @@ body {
   max-width: 50%;
 }
 
+a {
+  text-decoration: none;
+}
+
 /* Buttons from Skeleton V2.0.4 - www.getskeleton.com
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .button,
