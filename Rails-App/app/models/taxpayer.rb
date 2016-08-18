@@ -1,13 +1,12 @@
 require 'constants_by_filing_status'
 
-class Taxpayer < ActiveRecord::Base
+class Taxpayer
 
   include Tax
   attr_accessor :gross_income
   attr_reader :estimated_taxes, :average_rate, :marginal_rate, :standard_deduction, :personal_exemption
 
   def initialize(form_input)
-    super
     @gross_income = form_input[:gross_income].to_i
     @filing_status = form_input[:filing_status]
     @tax_brackets = BRACKETS[@filing_status.to_sym]
