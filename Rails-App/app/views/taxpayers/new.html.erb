@@ -8,19 +8,19 @@
   <div class="form-inputs">
   <h3>Filing Status</h3>
 
-  <%= f.radio_button(:filing_status, "single") %>
+  <%= f.radio_button(:filing_status, "single", required: true) %>
   <%= label_tag(:single, "Single") %><br />
-  <%= f.radio_button(:filing_status, "mfj") %>
+  <%= f.radio_button(:filing_status, "mfj", required: true) %>
   <%= label_tag(:mfj, "Married Filing Jointly") %><br />
-  <%= f.radio_button(:filing_status, "mfs") %>
+  <%= f.radio_button(:filing_status, "mfs", required: true) %>
   <%= label_tag(:mfs, "Married Filing Separately") %><br />
-  <%= f.radio_button(:filing_status, "head_of_household") %>
+  <%= f.radio_button(:filing_status, "head_of_household", required: true) %>
   <%= label_tag(:head_of_household, "Head of Household") %><br />
-  <%= f.radio_button(:filing_status, "mfj") %>
+  <%= f.radio_button(:filing_status, "mfj", required: true) %>
   <%= label_tag(:mfj, "Qualifying Widow(er)") %><br />
 
   <h3>Gross Income</h3>
-  <%= f.number_field(:gross_income, in: 0.0..1000000000.0, step: 0.5) %>
+  <%= f.number_field(:gross_income, in: 0.0..1000000000.0, step: 1.0, required: true) %>
   </div>
   <br />
   <br />
