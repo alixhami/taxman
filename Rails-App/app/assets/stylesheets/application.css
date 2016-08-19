@@ -14,31 +14,22 @@
  *= require_self
  */
 
-html {
-  height: 100%;
-}
-
 body {
-  background-color: gray;
   margin: 0;
 	padding: 0;
 	border: 0;
-  height: 100%;
   font-family: sans-serif;
 }
 
 .container {
-  background-color: white;
   text-align: center;
-  margin: 0 auto;
-  padding: 0;
-  border: 1px solid white;
-  height: 100%;
-  width: 80%;
+  margin: 50px auto;
+  padding-bottom: 40px;
 }
 
 .content-container {
   margin: 0 auto;
+  max-width: 40em;
 }
 
 .big-title {
@@ -50,10 +41,10 @@ body {
   font-size: 3em;
 }
 
-.form-inputs {
+.radio-buttons {
   margin: 0 auto;
   text-align: left;
-  max-width: 50%;
+  max-width: 35%;
 }
 
 a {

@@ -5,9 +5,10 @@
 <div class="content-container">
 
 <%= form_for :taxpayer, url: estimated_tax_path do |f| %>
-  <div class="form-inputs">
+
   <h3>Filing Status</h3>
 
+  <div class="radio-buttons">
   <%= f.radio_button(:filing_status, "single", required: true) %>
   <%= label_tag(:single, "Single") %><br />
   <%= f.radio_button(:filing_status, "mfj", required: true) %>
@@ -18,10 +19,11 @@
   <%= label_tag(:head_of_household, "Head of Household") %><br />
   <%= f.radio_button(:filing_status, "mfj", required: true) %>
   <%= label_tag(:mfj, "Qualifying Widow(er)") %><br />
+  </div>
 
   <h3>Gross Income</h3>
   <%= f.number_field(:gross_income, in: 0.0..1000000000.0, step: 1.0, required: true) %>
-  </div>
+  
   <br />
   <br />
 
